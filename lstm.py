@@ -1,4 +1,8 @@
-# Let`s import all packages that we may need:
+#Author: Justin W. Nicholson
+#Project: Nuclear Impulse
+#Description: Measure of nuclear prolif. desire vs ability
+#################################################################
+# Housekeeping:
 
 import sys
 import numpy as np # linear algebra
@@ -16,7 +20,7 @@ from sklearn.feature_selection import SelectFromModel
 from sklearn import metrics # for the check the error and accuracy of the model
 from sklearn.metrics import mean_squared_error,r2_score
 
-## for Deep-learing:
+## Import Deep Learning Packages:
 import keras
 from keras.layers import Dense
 from keras.models import Sequential
@@ -30,12 +34,7 @@ from keras.layers.convolutional import Conv1D
 from keras.layers.convolutional import MaxPooling1D
 from keras.layers import Dropout
 
-
-## Data can be downloaded from: http://archive.ics.uci.edu/ml/machine-learning-databases/00235/
-## Just open the zip file and grab the file 'household_power_consumption.txt' put it in the directory
-## that you would like to run the code.
-
-
+#import necessary data
 df = pd.read_csv('~/lstm_test/input/household_power_consumption.txt', sep=';',
                  parse_dates={'dt' : ['Date', 'Time']}, infer_datetime_format=True,
                  low_memory=False, na_values=['nan','?'], index_col='dt')
