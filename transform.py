@@ -42,3 +42,28 @@ def series_to_supervised(data, n_in=1, n_out=1, dropnan=True):
     if dropnan:
         agg.dropna(inplace=True)
     return agg
+
+
+
+# TODO: turn his into a function!!!
+# specify number of hours
+n_years = 3
+#run through the slicer
+reframed = series_to_supervised(scaled, n_years, 1)
+...
+
+# no longer just drop those columns
+# reframed.drop(reframed.columns[[9,10,11,12,13,14,15]], axis=1, inplace=True)
+# print(reframed.head())
+
+# be more careful about choosing columns for input and output
+n_features = 7
+n_obs = n_years * n_features
+train_X, train_y = train[:, 0:n_obs], train[:, -n_features]
+test_X, test_y = test[:, 0:n_obs], test[:, -n_features]
+# reshape input to be 3D [samples, timesteps, features]
+train_X = train_X.reshape((train_X.shape[0], n_years, n_features))
+test_X = test_X.reshape((test_X.shape[0], n_years, n_features))
+
+#sanity check:
+print(train_X.shape, train_y.shape, test_X.shape, test_y.shape)
