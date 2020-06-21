@@ -40,18 +40,11 @@ df = pd.read_csv('input/nu_public_rep.csv', sep=',',
                  low_memory=False, na_values=['nan','?'])
 df.head()
 
- df.Global_active_power.resample('D').sum().plot(title='Global_active_power resampled over day for sum')
-#df.Global_active_power.resample('D').mean().plot(title='Global_active_power resampled over day', color='red')
-plt.tight_layout()
-plt.show()
+list(data.columns)
+df.groupby('year')['Nu_means'].mean().plot()
 
-df.Global_active_power.resample('D').mean().plot(title='Global_active_power resampled over day for mean', color='red')
-plt.tight_layout()
-plt.show()
-df.head()
-
+#convert data to tensor suitable for LSTM
 df_2 = series_to_supervised(df, 1, 1)
-
 
 # split into train and test sets
 values = df_2.values
