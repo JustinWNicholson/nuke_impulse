@@ -52,12 +52,6 @@ df.head()
 
 df_2 = series_to_supervised(df, 1, 1)
 
-df_2.head()
-df_2.shape
-df.shape
-
-
-
 
 # split into train and test sets
 values = df_2.values
@@ -76,12 +70,7 @@ print(train_X.shape, train_y.shape, test_X.shape, test_y.shape)
 # We reshaped the input into the 3D format as expected by LSTMs, namely [samples, timesteps, features].
 
 
-train_X.shape
-df_2.head()
-df_2.shape
-df_2.head()
-
-
+#Build the deep learning model: one LSTM level, one dropout and a dense output
 model = Sequential()
 model.add(LSTM(100, input_shape=(train_X.shape[1], train_X.shape[2])))
 model.add(Dropout(0.2))
@@ -90,12 +79,7 @@ model.add(Dropout(0.2))
 model.add(Dense(1))
 model.compile(loss='mean_squared_error', optimizer='adam')
 
-
-
-
-train_X.shape
-
-# fit network
+# train network
 history = model.fit(train_X, train_y, epochs=20, batch_size=70, validation_data=(test_X, test_y), verbose=2, shuffle=False)
 
 # summarize history for loss
@@ -113,6 +97,7 @@ test_X = test_X.reshape((test_X.shape[0], 13))
 test_X.shape
 test_X.shape
 yhat.shape
+
 # invert scaling for forecast
 zinv_yhat = np.concatenate((yhat, test_X[:, -13:]), axis=1)
 
