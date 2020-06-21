@@ -33,12 +33,12 @@ from keras.layers import LSTM
 from keras.layers.convolutional import Conv1D
 from keras.layers.convolutional import MaxPooling1D
 from keras.layers import Dropout
-
+import os
 #import necessary data
-df = pd.read_csv('~/lstm_test/input/nu_public_rep.csv', sep=';',
-                 parse_dates={'dt' : ['Date', 'Time']}, infer_datetime_format=True,
-                 low_memory=False, na_values=['nan','?'], index_col='dt')
-
+os.getcwd()
+df = pd.read_csv('input/nu_public_rep.csv', sep=',',
+                 low_memory=False, na_values=['nan','?'])
+df.head()
 
  df.Global_active_power.resample('D').sum().plot(title='Global_active_power resampled over day for sum')
 #df.Global_active_power.resample('D').mean().plot(title='Global_active_power resampled over day', color='red')
