@@ -35,13 +35,44 @@ from keras.layers.convolutional import MaxPooling1D
 from keras.layers import Dropout
 import os
 #import necessary data
-os.getcwd()
 df = pd.read_csv('input/nu_public_rep.csv', sep=',',
                  low_memory=False, na_values=['nan','?'])
-df.head()
 
-list(data.columns)
-df.groupby('year')['Nu_means'].mean().plot()
+
+# load dataset
+dataset = read_csv('pollution.csv', header=0, index_col=0)
+values = dataset.values
+# integer encode direction - NEED TO MODIFY
+encoder = LabelEncoder()
+values[:,4] = encoder.fit_transform(values[:,4])
+# ensure all data is float
+values = values.astype('float32')
+# normalize features
+scaler = MinMaxScaler(feature_range=(0, 1))
+scaled = scaler.fit_transform(values)
+# specify the number of lag hours
+n_years = 3
+n_features = 8
+# frame as supervised learning
+reframed = series_to_supervised(scaled, n_years, 1)
+print(reframed.shape)
+
+#####THIS SECTION CREATES TRAIN AND TEST DATA - NEED TO UPDATE
+# split into train and test sets
+values = reframed.values
+n_train_hours = 365 * 24
+train = values[:n_train_hours, :]
+test = values[n_train_hours:, :]
+# split into input and outputs
+n_obs = n_hours * n_features
+train_X, train_y = train[:, :n_obs], train[:, -n_features]
+test_X, test_y = test[:, :n_obs], test[:, -n_features]
+print(train_X.shape, len(train_X), train_y.shape)
+# reshape input to be 3D [samples, timesteps, features]
+train_X = train_X.reshape((train_X.shape[0], n_hours, n_features))
+test_X = test_X.reshape((test_X.shape[0], n_hours, n_features))
+print(train_X.shape, train_y.shape, test_X.shape, test_y.shape)
+
 
 #convert data to tensor suitable for LSTM
 df_2 = series_to_supervised(df, 1, 1)

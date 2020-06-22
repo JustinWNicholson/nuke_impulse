@@ -1,3 +1,4 @@
+
 def series_to_supervised(data, n_in=1, n_out=1, dropnan=True):
     '''
     n_in: Number of lag observations as input (X). Values may be between [1..len(data)] Optional. Defaults to 1.
@@ -44,26 +45,29 @@ def series_to_supervised(data, n_in=1, n_out=1, dropnan=True):
     return agg
 
 
+def create_timesteps(data, n_features, n_years=3, n_train_rows = 2000, dropnan=True):
 
-# TODO: turn his into a function!!!
-# specify number of hours
-n_years = 3
-#run through the slicer
-reframed = series_to_supervised(scaled, n_years, 1)
-...
+    values = data.values
+    df.shape
+    reframed = series_to_supervised(df, n_years, 1)
+    print(reframed.shape)
 
-# no longer just drop those columns
-# reframed.drop(reframed.columns[[9,10,11,12,13,14,15]], axis=1, inplace=True)
-# print(reframed.head())
+#####THIS SECTION CREATES TRAIN AND TEST DATA - NEED TO UPDATE
+# split into train and test sets
+    values = reframed.values
+    train = values[:n_train_rows, :]
+    test = values[n_train_rows:, :]
 
-# be more careful about choosing columns for input and output
-n_features = 7
-n_obs = n_years * n_features
-train_X, train_y = train[:, 0:n_obs], train[:, -n_features]
-test_X, test_y = test[:, 0:n_obs], test[:, -n_features]
+    print(train.shape)
+    print(test.shape)
+# split into input and outputs
+    n_obs = n_years * n_features
+    train_X, train_y = train[:, :n_obs], train[:, -n_features]
+    test_X, test_y = test[:, :n_obs], test[:, -n_features]
+    print(train_X.shape, len(train_X), train_y.shape)
+
 # reshape input to be 3D [samples, timesteps, features]
-train_X = train_X.reshape((train_X.shape[0], n_years, n_features))
-test_X = test_X.reshape((test_X.shape[0], n_years, n_features))
-
-#sanity check:
-print(train_X.shape, train_y.shape, test_X.shape, test_y.shape)
+    train_X = train_X.reshape((train_X.shape[0], n_years, n_features))
+    test_X = test_X.reshape((test_X.shape[0], n_years, n_features))
+    print(train_X.shape, train_y.shape, test_X.shape, test_y.shape)
+    return (train_X, train_y, test_X, test_y)
