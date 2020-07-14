@@ -40,8 +40,8 @@ df = pd.read_csv('input/nu_public_rep.csv', sep=',',
 
 
 # load dataset
-dataset = read_csv('pollution.csv', header=0, index_col=0)
-values = dataset.values
+dataset = pd.read_csv('input/nu_public_rep.csv', sep=',',
+                 low_memory=False, na_values=['nan','?'])values = dataset.values
 # integer encode direction - NEED TO MODIFY
 encoder = LabelEncoder()
 values[:,4] = encoder.fit_transform(values[:,4])
@@ -80,7 +80,7 @@ df_2 = series_to_supervised(df, 1, 1)
 # split into train and test sets
 values = df_2.values
 
-n_train_time = 365*24
+n_train_time = 700
 train = values[:n_train_time, :]
 test = values[n_train_time:, :]
 ##test = values[n_train_time:n_test_time, :]
